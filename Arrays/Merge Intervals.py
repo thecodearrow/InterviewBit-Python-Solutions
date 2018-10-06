@@ -1,5 +1,5 @@
 """
-#https://www.interviewbit.com/problems/merge-intervals/
+https://www.interviewbit.com/problems/merge-overlapping-intervals/
 
 #EXCELLENT TUTORIAL IS HERE >>  https://www.youtube.com/watch?v=WdgAKCnWnwA
 
@@ -14,11 +14,20 @@ You may assume that the intervals were initially sorted according to their start
 #     def __init__(self, s=0, e=0):
 #         self.start = s
 #         self.end = e
+
+
+# Definition for an interval.
+# class Interval:
+#     def __init__(self, s=0, e=0):
+#         self.start = s
+#         self.end = e
+
+
+
 import functools
 from collections import deque
 class Solution:
     # @param intervals, a list of Intervals
-    # @param new_interval, a Interval
     # @return a list of Interval
     
     def cmp(self,x,y):
@@ -35,10 +44,7 @@ class Solution:
                 return -1
         else:
             return -1
-            
-    def insert(self, intervals, new_interval):
-        
-        intervals.append(new_interval)
+    def merge(self, intervals):
         intervals=sorted(intervals,key=functools.cmp_to_key(self.cmp))
         
         stack=deque()
@@ -58,14 +64,3 @@ class Solution:
             
         ans=list(stack)
         return ans
-
-
- 
-            
-        
-        
-                
-            
-        
-        
-        
