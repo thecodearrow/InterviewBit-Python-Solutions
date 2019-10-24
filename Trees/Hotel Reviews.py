@@ -1,45 +1,85 @@
 #Without Tries 
+#https://www.interviewbit.com/problems/hotel-reviews/
 
-from collections import defaultdict
 class Solution:
     # @param A : string
     # @param B : list of strings
     # @return a list of integers
+    
     def solve(self, A, B):
-        good_words=A.split("_")
-        good=set()
-        order={}
-        idx=0
-        for s in B:
-            order[s]=idx
-            idx+=1
-            
-        for g in good_words:
-            good.add(g)
-        good_words=good
-        words=[]
-        for s in B:
-            strings=s.split("_")
-            count=0
-            for string in strings:
-                if(string in good_words):
-                    count+=1
-            words.append((s,count))
-        words=sorted(words,key=lambda x:x[1])[::-1]
-        ans=[]
-        temp=[]
-        
-        reordering=defaultdict(list)
-        for i in range(len(words)):
-            w=words[i]
-            reordering[w[1]].append(order[w[0]])
-            
-        keys=sorted(reordering)[::-1]
+        keys=A.split("_")
+        keywords=set()
         for k in keys:
-            for i in reordering[k][::-1]:
-                ans.append(i)
+            keywords.add(k)
+        
+        good_reviews=[]
+        for i,word in enumerate(B):
+            score=0
+            for w in word.split("_"):
+                if(w in keywords):
+                    score+=1
+            good_reviews.append([i,score])
+            
+        good_reviews=sorted(good_reviews,key=lambda x:x[1],reverse=True)
+        
+        review_order=[]
+        for idx,score in good_reviews:
+            review_order.append(idx)
+            
+        return review_order
+
+#Using Trie
+
+class Trie:
+    def __init__(self):
+        self.letters={}
+    
+    def addString(self,string):
+        letters=self.letters
+        for c in string:
+            if(c not in letters):
+                letters[c]={}
+            letters=letters[c]
+        
+        letters["*"]=True #Marks the end of a word
+    
+    def containsString(self,string):
+        letters=self.letters
+        for c in string:
+            if(c not in letters):
+                return False
+            letters=letters[c]
+        
+        if("*" in letters):
+            #end of string
+            return True
+        return False
                 
         
+
+class Solution:
+    # @param A : string
+    # @param B : list of strings
+    # @return a list of integers
+    
+    def solve(self, A, B):
+        keywords=A.split("_")
+        t=Trie()
+        for s in keywords:
+            t.addString(s)
         
-        return ans
+        good_reviews=[]
+        for i,word in enumerate(B):
+            score=0
+            for w in word.split("_"):
+                if(t.containsString(w)):
+                    score+=1
+            good_reviews.append([i,score])
+            
+        good_reviews=sorted(good_reviews,key=lambda x:x[1],reverse=True)
         
+        review_order=[]
+        for idx,score in good_reviews:
+            review_order.append(idx)
+            
+        return review_order
