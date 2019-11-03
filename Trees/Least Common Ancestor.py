@@ -1,5 +1,7 @@
 #https://www.youtube.com/watch?v=GnliEfQo114
 
+#https://www.youtube.com/watch?v=13m9ZCB8gjw
+
 # Definition for a  binary tree node
 # class TreeNode:
 #     def __init__(self, x):
@@ -7,7 +9,43 @@
 #         self.left = None
 #         self.right = None
 
-class Solution:
+
+class Solution1:
+    # @param A : root node of tree
+    # @param B : integer
+    # @param C : integer
+    # @return an integer
+    def contains(self,root,val):
+        if(root is None):
+            return False
+        if(root.val==val):
+            return True
+        return self.contains(root.left,val) or self.contains(root.right,val)
+    
+    def findLCA(self,A,B,C):
+        if(A is None):
+            return None
+        if(A.val==B or A.val==C):
+            return A.val
+        left_return=self.findLCA(A.left,B,C)
+        right_return=self.findLCA(A.right,B,C)
+        if(left_return and right_return):
+            return A.val
+        if(left_return):
+            return left_return
+        if(right_return):
+            return right_return
+        return None
+    def lca(self, A, B, C):
+        if(not self.contains(A,B) or not self.contains(A,C)):
+            return -1
+        lca=self.findLCA(A,B,C)
+        if(lca):
+            return lca
+        return -1
+
+
+class Solution2:
     # @param A : root node of tree
     # @param B : integer
     # @param C : integer
