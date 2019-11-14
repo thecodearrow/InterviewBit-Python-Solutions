@@ -1,33 +1,27 @@
-"""
-Given an integer array, find if an integer p exists in the array such that the number of integers greater than p in the array equals to p
-If such an integer is found return 1 else return -1.
 
-"""
+#https://www.interviewbit.com/problems/noble-integer/
 
-from collections import defaultdict
 class Solution:
-  
+    # @param A : list of integers
+    # @return an integer
     def solve(self, A):
         found=False
-        A=sorted(A)[::-1]
-        count=0
-        freq=defaultdict(lambda:0)
-        new_A=[]
-        for i in range(len(A)):
-            if(freq[A[i]]==0):
-                new_A.append(A[i])
-            freq[A[i]]+=1
-            
-            
-        for i in range(len(new_A)):
-            p=new_A[i]
-            count+=freq[p]
-            if(count-freq[p]==p):
-                found=True
-                
+        A=sorted(A)
+        rem_count=len(A)-1
+        for i,p in enumerate(A):
+            if(i<len(A)-1):
+                if(A[i]!=A[i+1]):
+                    if(p==rem_count):
+                        found=True
+                        break
                     
-        
+            else:
+                if(p==rem_count):
+                    found=True
+            rem_count-=1
+            
         if(found):
             return 1
-        else:
-            return -1
+        return -1
+            
+                
