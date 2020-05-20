@@ -1,69 +1,39 @@
-"""
-Find out the maximum sub-array of non negative numbers from an array.
-The sub-array should be continuous. That is, a sub-array created by choosing the second and fourth element and skipping the third element is invalid.
 
-Maximum sub-array is defined in terms of the sum of the elements in the sub-array. Sub-array A is greater than sub-array B if sum(A) > sum(B).
+#https://www.interviewbit.com/problems/max-non-negative-subarray/
 
-NOTE: If there is a tie, then compare with segment's length and return segment which has maximum length
-NOTE 2: If there is still a tie, then return the segment with minimum starting index
-"""
-
-
-import functools
 class Solution:
-    
-    def cmp(self,x,y):
-        s1=x[0]
-        s2=y[0]
-        l1=x[1]
-        l2=y[1]
-        start1=x[2]
-        start2=y[2]
-        if(s1>s2):
-            return 1
-        elif(s1==s2):
-            if(l1>=l2):
-                return 1
-            elif(l1==l2):
-                if(start1<=start2):
-                    return 1
-                else:
-                    return -1
+    # @param A : list of integers
+    # @return a list of integers
+    def maxset(self, A):
+        global_max_sum=0
+        global_max_length=0
+        current_max_sum=0
+        current_max_length=0
+        curr_i=0
+        curr_j=0
+        ans_i=None
+        ans_j=None
+        for i,ele in enumerate(A):
+            if(ele>=0):
+                current_max_length+=1
+                current_max_sum+=ele
+                curr_j+=1
+            if(current_max_sum>global_max_sum or (current_max_sum==global_max_sum and current_max_length>global_max_length)):
+                ans_i,ans_j=curr_i,curr_j
+                global_max_sum=current_max_sum
+                global_max_length=current_max_length
+            if(ele<0):
+                current_max_sum=0
+                current_max_length=0
+                curr_i=i+1
+                curr_j=i+1
+                
+        if(ans_i is None):
+            return []
             
-            else:
-                return -1
-        else:
-            return -1
+        return A[ans_i:ans_j]
                 
             
             
-    def maxset(self, A):
-        A.append(-1) #signifying the end
-        arrays=[]
-        start=0
-        end=0
-        for ele in A:
-            if(ele>=0):
-                end+=1
-            else:
-                if(start!=end):
-                    arrays.append([start,end])
-                start=end+1
-                end=start
-        if(len(arrays)==0):
-            return [] #all negative numbers
-        
-        final_array=[] #[sum,length,start_index]
-        for temp in arrays:
-            a=A[temp[0]:temp[1]]
-            store=[sum(a),len(a),temp[0],temp[1]]
-            final_array.append(store)
-        
-        final_array=sorted(final_array,key=functools.cmp_to_key(self.cmp))[::-1]
-        s=final_array[0][2]
-        e=final_array[0][3]
-        return A[s:e]
-        
-        
-        
+
     
